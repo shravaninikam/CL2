@@ -1,0 +1,53 @@
+int buzzPin = 7;        // Correct variable declaration with '='
+int trigPin = 6;        // Correct variable declaration with '='
+int echoPin = A0;       // Echo pin for ultrasonic sensor
+int IRPin = A1;         // IR sensor pin
+int IRV;                 // Variable to store IR sensor value
+int duration,distance;            // Duration variable for distance calculation
+           // Distance variable (float for precision)
+
+void setup() {
+  pinMode(trigPin, OUTPUT);  // Set trigPin as OUTPUT
+  pinMode(buzzPin, OUTPUT);  // Set buzzPin as OUTPUT
+  pinMode(echoPin, INPUT);   // Set echoPin as INPUT
+  pinMode(IRPin, INPUT);      // Set IRPin as INPUT
+
+  Serial.begin(9600);         // Start serial communication
+}
+
+void loop() {
+  // Clear the trigPin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  // Trigger the ultrasonic sensor
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Read the echo pin
+  duration = pulseIn(echoPin, HIGH);
+
+  // Calculate distance
+  distance = duration * 0.034 / 2; // Use float for precision
+
+  Serial.print("Distance in cm is: ");
+  Serial.println(distance);
+
+  // Check distance and activate buzzer
+  if (distance < 20) {
+    digitalWrite(buzzPin, HIGH); // Turn on buzzer if distance is less than 20 cm
+  }
+  else {
+    digitalWrite(buzzPin, LOW);  // Turn off buzzer otherwise
+  }
+ 
+  delay(100);
+
+  // Read IR sensor value
+  IRV = digitalRead(IRPin);      // Corrected case for digitalRead
+  Serial.print("IR Sensor value: ");
+  Serial.println(IRV);            // Print IR sensor value
+
+  delay(1000);                   // Delay for readability
+}

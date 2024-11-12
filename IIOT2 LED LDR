@@ -1,0 +1,27 @@
+const int ledPin = 5;  // LED connected to digital pin 2
+const int ldrPin = A0; // LDR connected to analog pin A2
+
+void setup() {
+  // The setup() function will only run once, after each powerup or reset of the Arduino board.
+  Serial.begin(9600); // Start serial communication
+ 
+  pinMode(ledPin, OUTPUT); // Set LED pin as output
+  pinMode(ldrPin, INPUT);  // Set LDR pin as input
+}
+
+void loop() {
+  // The loop() function runs repeatedly and contains the main code.
+  int ldrStatus = analogRead(ldrPin); // Read LDR value
+
+  if (ldrStatus <= 320) {
+    digitalWrite(ledPin, HIGH); // Turn on LED if it's dark
+    Serial.print("Darkness over here, turn on the LED: ");
+    Serial.println(ldrStatus);
+  } else {
+    digitalWrite(ledPin, LOW); // Turn off LED if there's sufficient light
+    Serial.print("There is sufficient light, turn off the LED: ");
+    Serial.println(ldrStatus);
+  }
+
+  delay(1000); // Add a delay of 10000 milliseconds (10 seconds)
+}

@@ -1,0 +1,29 @@
+/ PR1 -> Write an Arduino/ Raspberry pi program for interfacing with PIR sensor Experiment
+
+const int PIR_SENSOR_OP_PIN = 4; // Pin for PIR sensor
+int warm_up = 1; // Initialize warm_up state
+
+void setup() {
+  pinMode(PIR_SENSOR_OP_PIN, INPUT); // Set the PIR sensor pin as input
+  Serial.begin(9600); // Start serial communication
+  delay(10000); // Allow some time for the sensor to warm up
+}
+
+void loop() {
+  int sensor_op;
+  sensor_op = digitalRead(PIR_SENSOR_OP_PIN); // Read the PIR sensor
+
+  if (sensor_op == LOW) {
+    if (warm_up == 1) {
+      Serial.print("Warming Up\n"); // Indicate the warming up phase
+      warm_up = 0; // Set warm_up to 0 after the first message
+      delay(2000); // Wait for 2 seconds
+    }
+    Serial.print("No Object Detected\n"); // No motion detected
+    delay(1000); // Wait for 1 second before the next reading
+  } else {
+    Serial.print("Object Detected\n"); // Motion detected
+    warm_up = 1; // Set warm_up to 1 indicating the sensor is ready for the next cycle
+    delay(1000); // Wait for 1 second before the next reading
+  }
+}
