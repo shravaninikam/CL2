@@ -29,3 +29,45 @@ void loop() {
 void sendAlertt(String,msg) {
     Serial.println(msg);
 }
+
+
+
+
+#include<DHT.h>
+#define DHTPIN 2
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN,DHTTYPE);
+const float maxtemp = 30.00;
+const float maxhum = 70.00;
+
+void setup() {
+    Serial.begin(9600);
+    dht.begin();
+}
+
+void loop() {
+    delay(2000);
+    float temp = dht.readTemperature();
+    float hum = dht.readHumidity();
+
+    if(isnan(temp) || isnan(hum)) {
+        Serial.println("Failed to read from sensor");
+        return;
+    }
+    Serial.print("Current temperature: ");
+    Serial.print(temp);
+    Serial.print(" *C ");
+
+    if (temp>=maxtemp) {
+        sendAlert("Temperature Alert: " + String(temp)+"C");
+    }
+
+    if (hum>=maxhum) {
+        sendAlert("Humidity Alert: " + String(hum)+"%");
+    }
+}
+
+void sendAlert(String message) {
+    Serial.print(message);
+}
